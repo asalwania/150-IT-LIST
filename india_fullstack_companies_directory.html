@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Top 150 Indian Companies</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-sans);
+    }
+
+    .header {
+      padding: 20px 16px 14px;
+      border-bottom: 0.5px solid var(--color-border-tertiary);
+      position: sticky;
+      top: 0;
+      background: var(--color-background-primary);
+      z-index: 50;
+    }
+
+    .title {
+      font-size: 17px;
+      font-weight: 500;
+      color: var(--color-text-primary);
+      margin-bottom: 2px;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: var(--color-text-secondary);
+      margin-bottom: 12px;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    input,
+    select {
+      padding: 7px 11px;
+      border-radius: var(--border-radius-md);
+      border: 0.5px solid var(--color-border-secondary);
+      background: var(--color-background-secondary);
+      color: var(--color-text-primary);
+      font-size: 13px;
+      font-family: var(--font-sans);
+    }
+
+    input {
+      flex: 1 1 180px;
+      min-width: 0;
+    }
+
+    select {
+      cursor: pointer;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+
+    .badge {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 10px;
+      padding: 16px;
+    }
+
+    .card {
+      background: var(--color-background-primary);
+      border: 0.5px solid var(--color-border-tertiary);
+      border-radius: var(--border-radius-lg);
+      padding: 13px 14px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .card:hover {
+      border-color: var(--color-border-secondary);
+      background: var(--color-background-secondary);
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--border-radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 500;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .cname {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .ccity {
+      font-size: 12px;
+      color: var(--color-text-secondary);
+      margin-top: 1px;
+    }
+
+    .card-bottom {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .apply {
+      margin-left: auto;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--color-text-info);
+    }
+
+    .empty {
+      text-align: center;
+      color: var(--color-text-secondary);
+      padding: 48px 16px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <div class="title">India Full-Stack Jobs Directory</div>
+    <div class="subtitle" id="sub">150 companies · click any card to apply</div>
+    <div class="controls">
+      <input type="text" placeholder="Search company or city..." id="search" />
+      <select id="catFilter"></select>
+      <select id="tierFilter">
+        <option>All tiers</option>
+        <option>FAANG</option>
+        <option>Top MNC</option>
+        <option>IT Giant</option>
+        <option>Unicorn</option>
+        <option>Startup</option>
+      </select>
+      <select id="sortSel">
+        <option value="id">Default order</option>
+        <option value="name">A – Z</option>
+      </select>
+    </div>
+    <div class="legend">
+      <span class="badge" style="background:#B5D4F4;color:#0C447C">FAANG</span>
+      <span class="badge" style="background:#AFA9EC;color:#3C3489">Top MNC</span>
+      <span class="badge" style="background:#CEC4F5;color:#533AB7">IT Giant</span>
+      <span class="badge" style="background:#9FE1CB;color:#085041">Unicorn</span>
+      <span class="badge" style="background:#FAC775;color:#633806">Startup</span>
+    </div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <div style="text-align:center;font-size:12px;color:var(--color-text-secondary);padding:8px 0 24px">150 companies ·
+    March 2026 · links open careers pages</div>
+
+  <script>
+    const companies = [
+      { id: 1, name: "Google India", cat: "Big Tech", city: "Bengaluru", url: "https://careers.google.com", tier: "FAANG" },
+      { id: 2, name: "Microsoft India", cat: "Big Tech", city: "Hyderabad", url: "https://careers.microsoft.com", tier: "FAANG" },
+      { id: 3, name: "Amazon India", cat: "Big Tech", city: "Bengaluru", url: "https://www.amazon.jobs/en/locations/india", tier: "FAANG" },
+      { id: 4, name: "Meta India", cat: "Big Tech", city: "Bengaluru", url: "https://www.metacareers.com", tier: "FAANG" },
+      { id: 5, name: "Apple India", cat: "Big Tech", city: "Bengaluru", url: "https://www.apple.com/careers/in", tier: "FAANG" },
+      { id: 6, name: "Adobe India", cat: "Big Tech", city: "Noida", url: "https://careers.adobe.com", tier: "Top MNC" },
+      { id: 7, name: "Oracle India", cat: "Big Tech", city: "Bengaluru", url: "https://www.oracle.com/careers", tier: "Top MNC" },
+      { id: 8, name: "SAP India", cat: "Big Tech", city: "Bengaluru", url: "https://jobs.sap.com", tier: "Top MNC" },
+      { id: 9, name: "IBM India", cat: "Big Tech", city: "Bengaluru", url: "https://www.ibm.com/careers", tier: "Top MNC" },
+      { id: 10, name: "Cisco India", cat: "Big Tech", city: "Bengaluru", url: "https://jobs.cisco.com", tier: "Top MNC" },
+      { id: 11, name: "TCS", cat: "IT Services", city: "Pan India", url: "https://ibegin.tcs.com/iBegin", tier: "IT Giant" },
+      { id: 12, name: "Infosys", cat: "IT Services", city: "Pan India", url: "https://career.infosys.com", tier: "IT Giant" },
+      { id: 13, name: "Wipro", cat: "IT Services", city: "Pan India", url: "https://careers.wipro.com", tier: "IT Giant" },
+      { id: 14, name: "HCL Technologies", cat: "IT Services", city: "Noida", url: "https://www.hcltech.com/careers", tier: "IT Giant" },
+      { id: 15, name: "Tech Mahindra", cat: "IT Services", city: "Pune", url: "https://careers.techmahindra.com", tier: "IT Giant" },
+      { id: 16, name: "LTIMindtree", cat: "IT Services", city: "Mumbai", url: "https://www.ltimindtree.com/careers", tier: "IT Giant" },
+      { id: 17, name: "Mphasis", cat: "IT Services", city: "Bengaluru", url: "https://careers.mphasis.com", tier: "IT Giant" },
+      { id: 18, name: "Hexaware", cat: "IT Services", city: "Mumbai", url: "https://hexaware.com/careers", tier: "IT Giant" },
+      { id: 19, name: "Persistent Systems", cat: "IT Services", city: "Pune", url: "https://careers.persistent.com", tier: "IT Giant" },
+      { id: 20, name: "LTTS", cat: "IT Services", city: "Bengaluru", url: "https://www.ltts.com/careers", tier: "IT Giant" },
+      { id: 21, name: "Accenture India", cat: "Consulting", city: "Pan India", url: "https://www.accenture.com/in-en/careers", tier: "Top MNC" },
+      { id: 22, name: "Capgemini India", cat: "Consulting", city: "Pan India", url: "https://www.capgemini.com/in-en/careers", tier: "Top MNC" },
+      { id: 23, name: "Cognizant", cat: "Consulting", city: "Chennai", url: "https://careers.cognizant.com", tier: "Top MNC" },
+      { id: 24, name: "Deloitte India", cat: "Consulting", city: "Mumbai", url: "https://www2.deloitte.com/in/en/careers.html", tier: "Top MNC" },
+      { id: 25, name: "Nagarro", cat: "Consulting", city: "Gurugram", url: "https://www.nagarro.com/en/careers", tier: "Top MNC" },
+      { id: 26, name: "Razorpay", cat: "Fintech", city: "Bengaluru", url: "https://razorpay.com/jobs", tier: "Unicorn" },
+      { id: 27, name: "Paytm", cat: "Fintech", city: "Noida", url: "https://jobs.paytm.com", tier: "Unicorn" },
+      { id: 28, name: "PhonePe", cat: "Fintech", city: "Bengaluru", url: "https://www.phonepe.com/careers", tier: "Unicorn" },
+      { id: 29, name: "CRED", cat: "Fintech", city: "Bengaluru", url: "https://careers.cred.club", tier: "Unicorn" },
+      { id: 30, name: "Groww", cat: "Fintech", city: "Bengaluru", url: "https://groww.in/careers", tier: "Unicorn" },
+      { id: 31, name: "Zerodha", cat: "Fintech", city: "Bengaluru", url: "https://zerodha.com/careers", tier: "Startup" },
+      { id: 32, name: "BharatPe", cat: "Fintech", city: "Delhi", url: "https://bharatpe.com/careers", tier: "Startup" },
+      { id: 33, name: "Cashfree Payments", cat: "Fintech", city: "Bengaluru", url: "https://www.cashfree.com/careers", tier: "Startup" },
+      { id: 34, name: "Juspay", cat: "Fintech", city: "Bengaluru", url: "https://juspay.in/careers", tier: "Startup" },
+      { id: 35, name: "Jupiter Money", cat: "Fintech", city: "Bengaluru", url: "https://jupiter.money/careers", tier: "Startup" },
+      { id: 36, name: "Fi Money", cat: "Fintech", city: "Bengaluru", url: "https://fi.money/careers", tier: "Startup" },
+      { id: 37, name: "Open Financial", cat: "Fintech", city: "Bengaluru", url: "https://open.money/careers", tier: "Startup" },
+      { id: 38, name: "Setu", cat: "Fintech", city: "Bengaluru", url: "https://setu.co/careers", tier: "Startup" },
+      { id: 39, name: "KreditBee", cat: "Fintech", city: "Bengaluru", url: "https://kreditbee.in/careers", tier: "Startup" },
+      { id: 40, name: "M2P Fintech", cat: "Fintech", city: "Chennai", url: "https://m2pfintech.com/careers", tier: "Startup" },
+      { id: 41, name: "Flipkart", cat: "E-Commerce", city: "Bengaluru", url: "https://www.flipkartcareers.com", tier: "Unicorn" },
+      { id: 42, name: "Meesho", cat: "E-Commerce", city: "Bengaluru", url: "https://meesho.io/careers", tier: "Unicorn" },
+      { id: 43, name: "Nykaa", cat: "E-Commerce", city: "Mumbai", url: "https://careers.nykaa.com", tier: "Unicorn" },
+      { id: 44, name: "Myntra", cat: "E-Commerce", city: "Bengaluru", url: "https://careers.myntra.com", tier: "Unicorn" },
+      { id: 45, name: "BigBasket", cat: "E-Commerce", city: "Bengaluru", url: "https://bigbasket.com/careers", tier: "Unicorn" },
+      { id: 46, name: "Lenskart", cat: "E-Commerce", city: "Delhi", url: "https://careers.lenskart.com", tier: "Unicorn" },
+      { id: 47, name: "Udaan", cat: "E-Commerce", city: "Bengaluru", url: "https://udaan.com/careers", tier: "Unicorn" },
+      { id: 48, name: "Cars24", cat: "E-Commerce", city: "Gurugram", url: "https://cars24.com/careers", tier: "Unicorn" },
+      { id: 49, name: "CarDekho", cat: "E-Commerce", city: "Jaipur", url: "https://www.cardekho.com/company/career", tier: "Startup" },
+      { id: 50, name: "Snapdeal", cat: "E-Commerce", city: "Delhi", url: "https://jobs.snapdeal.com", tier: "Startup" },
+      { id: 51, name: "Zomato", cat: "Food & Delivery", city: "Gurugram", url: "https://www.zomato.com/careers", tier: "Unicorn" },
+      { id: 52, name: "Swiggy", cat: "Food & Delivery", city: "Bengaluru", url: "https://careers.swiggy.com", tier: "Unicorn" },
+      { id: 53, name: "Blinkit", cat: "Food & Delivery", city: "Gurugram", url: "https://blinkit.com/careers", tier: "Unicorn" },
+      { id: 54, name: "Delhivery", cat: "Food & Delivery", city: "Gurugram", url: "https://www.delhivery.com/careers", tier: "Unicorn" },
+      { id: 55, name: "Shiprocket", cat: "Food & Delivery", city: "Delhi", url: "https://www.shiprocket.in/careers", tier: "Startup" },
+      { id: 56, name: "Ola", cat: "Mobility", city: "Bengaluru", url: "https://www.olacabs.com/careers", tier: "Unicorn" },
+      { id: 57, name: "Uber India", cat: "Mobility", city: "Bengaluru", url: "https://www.uber.com/in/en/careers", tier: "Top MNC" },
+      { id: 58, name: "Rapido", cat: "Mobility", city: "Bengaluru", url: "https://careers.rapido.bike", tier: "Startup" },
+      { id: 59, name: "MakeMyTrip", cat: "Mobility", city: "Gurugram", url: "https://careers.makemytrip.com", tier: "Unicorn" },
+      { id: 60, name: "ixigo", cat: "Mobility", city: "Gurugram", url: "https://careers.ixigo.com", tier: "Startup" },
+      { id: 61, name: "Freshworks", cat: "SaaS", city: "Chennai", url: "https://careers.freshworks.com", tier: "Unicorn" },
+      { id: 62, name: "Zoho", cat: "SaaS", city: "Chennai", url: "https://careers.zoho.com", tier: "Startup" },
+      { id: 63, name: "BrowserStack", cat: "SaaS", city: "Mumbai", url: "https://www.browserstack.com/careers", tier: "Unicorn" },
+      { id: 64, name: "Postman", cat: "SaaS", city: "Bengaluru", url: "https://www.postman.com/company/careers", tier: "Unicorn" },
+      { id: 65, name: "CleverTap", cat: "SaaS", city: "Mumbai", url: "https://clevertap.com/careers", tier: "Startup" },
+      { id: 66, name: "MoEngage", cat: "SaaS", city: "Bengaluru", url: "https://www.moengage.com/company/careers", tier: "Startup" },
+      { id: 67, name: "Chargebee", cat: "SaaS", city: "Chennai", url: "https://www.chargebee.com/careers", tier: "Unicorn" },
+      { id: 68, name: "Whatfix", cat: "SaaS", city: "Bengaluru", url: "https://whatfix.com/careers", tier: "Startup" },
+      { id: 69, name: "Darwinbox", cat: "SaaS", city: "Hyderabad", url: "https://darwinbox.com/careers", tier: "Unicorn" },
+      { id: 70, name: "Hasura", cat: "SaaS", city: "Bengaluru", url: "https://hasura.io/careers", tier: "Startup" },
+      { id: 71, name: "Druva", cat: "SaaS", city: "Pune", url: "https://www.druva.com/company/careers", tier: "Startup" },
+      { id: 72, name: "LeadSquared", cat: "SaaS", city: "Bengaluru", url: "https://www.leadsquared.com/careers", tier: "Startup" },
+      { id: 73, name: "Sprinklr India", cat: "SaaS", city: "Bengaluru", url: "https://careers.sprinklr.com", tier: "Top MNC" },
+      { id: 74, name: "Zendesk India", cat: "SaaS", city: "Bengaluru", url: "https://jobs.zendesk.com", tier: "Top MNC" },
+      { id: 75, name: "Atlassian India", cat: "SaaS", city: "Bengaluru", url: "https://www.atlassian.com/company/careers", tier: "Top MNC" },
+      { id: 76, name: "Byju's", cat: "Edtech", city: "Bengaluru", url: "https://byjus.com/careers", tier: "Unicorn" },
+      { id: 77, name: "Unacademy", cat: "Edtech", city: "Bengaluru", url: "https://unacademy.com/careers", tier: "Unicorn" },
+      { id: 78, name: "upGrad", cat: "Edtech", city: "Mumbai", url: "https://careers.upgrad.com", tier: "Unicorn" },
+      { id: 79, name: "Vedantu", cat: "Edtech", city: "Bengaluru", url: "https://www.vedantu.com/careers", tier: "Startup" },
+      { id: 80, name: "Scaler", cat: "Edtech", city: "Bengaluru", url: "https://www.scaler.com/careers", tier: "Startup" },
+      { id: 81, name: "Sarvam AI", cat: "AI / ML", city: "Bengaluru", url: "https://www.sarvam.ai/careers", tier: "Startup" },
+      { id: 82, name: "Yellow.ai", cat: "AI / ML", city: "Bengaluru", url: "https://yellow.ai/company/careers", tier: "Unicorn" },
+      { id: 83, name: "Observe.AI", cat: "AI / ML", city: "Bengaluru", url: "https://www.observe.ai/company/careers", tier: "Startup" },
+      { id: 84, name: "Uniphore", cat: "AI / ML", city: "Chennai", url: "https://www.uniphore.com/company/careers", tier: "Unicorn" },
+      { id: 85, name: "Haptik", cat: "AI / ML", city: "Mumbai", url: "https://haptik.ai/careers", tier: "Startup" },
+      { id: 86, name: "Kore.ai", cat: "AI / ML", city: "Hyderabad", url: "https://kore.ai/careers", tier: "Startup" },
+      { id: 87, name: "Vue.ai (Mad Street Den)", cat: "AI / ML", city: "Chennai", url: "https://www.madstreetden.com/careers", tier: "Startup" },
+      { id: 88, name: "Innovaccer", cat: "AI / ML", city: "Noida", url: "https://innovaccer.com/careers", tier: "Unicorn" },
+      { id: 89, name: "Avaamo", cat: "AI / ML", city: "Bengaluru", url: "https://avaamo.ai/company/careers", tier: "Startup" },
+      { id: 90, name: "Vernacular.ai", cat: "AI / ML", city: "Bengaluru", url: "https://vernacular.ai/careers", tier: "Startup" },
+      { id: 91, name: "Goldman Sachs India", cat: "GCC / Finance", city: "Bengaluru", url: "https://www.goldmansachs.com/careers", tier: "Top MNC" },
+      { id: 92, name: "JP Morgan India", cat: "GCC / Finance", city: "Mumbai", url: "https://careers.jpmorgan.com", tier: "Top MNC" },
+      { id: 93, name: "Morgan Stanley India", cat: "GCC / Finance", city: "Mumbai", url: "https://www.morganstanley.com/careers", tier: "Top MNC" },
+      { id: 94, name: "Fidelity India", cat: "GCC / Finance", city: "Bengaluru", url: "https://jobs.fidelity.com", tier: "Top MNC" },
+      { id: 95, name: "Deutsche Bank India", cat: "GCC / Finance", city: "Pune", url: "https://careers.db.com", tier: "Top MNC" },
+      { id: 96, name: "Barclays India", cat: "GCC / Finance", city: "Pune", url: "https://search.jobs.barclays", tier: "Top MNC" },
+      { id: 97, name: "PayPal India", cat: "GCC / Finance", city: "Chennai", url: "https://careers.paypal.com", tier: "Top MNC" },
+      { id: 98, name: "Walmart Global Tech", cat: "GCC / Finance", city: "Bengaluru", url: "https://careers.walmart.com", tier: "Top MNC" },
+      { id: 99, name: "American Express India", cat: "GCC / Finance", city: "Gurugram", url: "https://jobs.americanexpress.com", tier: "Top MNC" },
+      { id: 100, name: "Visa India", cat: "GCC / Finance", city: "Bengaluru", url: "https://careers.visa.com", tier: "Top MNC" },
+      { id: 101, name: "Dream11", cat: "Gaming", city: "Mumbai", url: "https://dreamsports.group/careers", tier: "Unicorn" },
+      { id: 102, name: "MPL", cat: "Gaming", city: "Bengaluru", url: "https://www.mpl.live/careers", tier: "Unicorn" },
+      { id: 103, name: "Nazara Technologies", cat: "Gaming", city: "Mumbai", url: "https://nazara.com/careers", tier: "Startup" },
+      { id: 104, name: "Games24x7", cat: "Gaming", city: "Mumbai", url: "https://games24x7.com/careers", tier: "Startup" },
+      { id: 105, name: "Junglee Games", cat: "Gaming", city: "Delhi", url: "https://jungleegames.com/careers", tier: "Startup" },
+      { id: 106, name: "ShareChat", cat: "Media / Social", city: "Bengaluru", url: "https://sharechat.com/careers", tier: "Unicorn" },
+      { id: 107, name: "InMobi", cat: "Media / Social", city: "Bengaluru", url: "https://www.inmobi.com/company/careers", tier: "Unicorn" },
+      { id: 108, name: "Disney+ Hotstar", cat: "Media / Social", city: "Mumbai", url: "https://careers.hotstar.com", tier: "Top MNC" },
+      { id: 109, name: "Dailyhunt", cat: "Media / Social", city: "Bengaluru", url: "https://jobs.dailyhunt.in", tier: "Unicorn" },
+      { id: 110, name: "Pocket FM", cat: "Media / Social", city: "Bengaluru", url: "https://pocketfm.com/careers", tier: "Startup" },
+      { id: 111, name: "Practo", cat: "Health Tech", city: "Bengaluru", url: "https://practo.com/careers", tier: "Startup" },
+      { id: 112, name: "PharmEasy", cat: "Health Tech", city: "Mumbai", url: "https://pharmeasy.in/careers", tier: "Unicorn" },
+      { id: 113, name: "1mg", cat: "Health Tech", city: "Gurugram", url: "https://careers.1mg.com", tier: "Unicorn" },
+      { id: 114, name: "Healthifyme", cat: "Health Tech", city: "Bengaluru", url: "https://www.healthifyme.com/careers", tier: "Startup" },
+      { id: 115, name: "MediBuddy", cat: "Health Tech", city: "Bengaluru", url: "https://medibuddy.in/careers", tier: "Startup" },
+      { id: 116, name: "NoBroker", cat: "PropTech", city: "Bengaluru", url: "https://nobroker.in/about/career", tier: "Unicorn" },
+      { id: 117, name: "Housing.com", cat: "PropTech", city: "Mumbai", url: "https://careers.housing.com", tier: "Startup" },
+      { id: 118, name: "99acres", cat: "PropTech", city: "Noida", url: "https://99acres.com/careers", tier: "Startup" },
+      { id: 119, name: "Magicbricks", cat: "PropTech", city: "Noida", url: "https://www.magicbricks.com/careers", tier: "Startup" },
+      { id: 120, name: "Stanza Living", cat: "PropTech", city: "Delhi", url: "https://www.stanzaliving.com/careers", tier: "Startup" },
+      { id: 121, name: "Nutanix India", cat: "Infrastructure", city: "Bengaluru", url: "https://www.nutanix.com/company/careers", tier: "Top MNC" },
+      { id: 122, name: "NetApp India", cat: "Infrastructure", city: "Bengaluru", url: "https://www.netapp.com/company/careers", tier: "Top MNC" },
+      { id: 123, name: "Rubrik India", cat: "Infrastructure", city: "Bengaluru", url: "https://www.rubrik.com/company/careers", tier: "Top MNC" },
+      { id: 124, name: "Elastic India", cat: "Infrastructure", city: "Bengaluru", url: "https://www.elastic.co/about/careers", tier: "Top MNC" },
+      { id: 125, name: "Qualcomm India", cat: "Infrastructure", city: "Hyderabad", url: "https://www.qualcomm.com/company/careers", tier: "Top MNC" },
+      { id: 126, name: "Shadowfax", cat: "Logistics", city: "Bengaluru", url: "https://www.shadowfax.in/careers", tier: "Startup" },
+      { id: 127, name: "Loconav", cat: "Logistics", city: "Delhi", url: "https://loconav.com/careers", tier: "Startup" },
+      { id: 128, name: "BlackBuck", cat: "Logistics", city: "Bengaluru", url: "https://blackbuck.com/careers", tier: "Unicorn" },
+      { id: 129, name: "Porter", cat: "Logistics", city: "Bengaluru", url: "https://porter.in/careers", tier: "Startup" },
+      { id: 130, name: "Rivigo", cat: "Logistics", city: "Gurugram", url: "https://rivigo.com/careers", tier: "Startup" },
+      { id: 131, name: "Naukri (InfoEdge)", cat: "HR Tech", city: "Noida", url: "https://careers.infoedge.in", tier: "Startup" },
+      { id: 132, name: "Apna", cat: "HR Tech", city: "Bengaluru", url: "https://apna.co/careers", tier: "Unicorn" },
+      { id: 133, name: "Springworks", cat: "HR Tech", city: "Bengaluru", url: "https://springworks.in/careers", tier: "Startup" },
+      { id: 134, name: "Keka HR", cat: "HR Tech", city: "Hyderabad", url: "https://www.keka.com/careers", tier: "Startup" },
+      { id: 135, name: "GreytHR", cat: "HR Tech", city: "Bengaluru", url: "https://greythr.com/careers", tier: "Startup" },
+      { id: 136, name: "Ninjacart", cat: "AgriTech", city: "Bengaluru", url: "https://ninjacart.com/careers", tier: "Unicorn" },
+      { id: 137, name: "DeHaat", cat: "AgriTech", city: "Patna", url: "https://dehaat.com/careers", tier: "Startup" },
+      { id: 138, name: "Urban Company", cat: "Services", city: "Gurugram", url: "https://www.urbancompany.com/careers", tier: "Unicorn" },
+      { id: 139, name: "OYO Rooms", cat: "Services", city: "Gurugram", url: "https://www.oyorooms.com/careers", tier: "Unicorn" },
+      { id: 140, name: "FabHotels", cat: "Services", city: "Gurugram", url: "https://fabhotels.com/careers", tier: "Startup" },
+      { id: 141, name: "Intel India", cat: "Deep Tech", city: "Bengaluru", url: "https://jobs.intel.com", tier: "Top MNC" },
+      { id: 142, name: "NVIDIA India", cat: "Deep Tech", city: "Bengaluru", url: "https://nvidia.com/en-us/about-nvidia/careers", tier: "Top MNC" },
+      { id: 143, name: "Micron India", cat: "Deep Tech", city: "Hyderabad", url: "https://www.micron.com/about/careers", tier: "Top MNC" },
+      { id: 144, name: "Texas Instruments India", cat: "Deep Tech", city: "Bengaluru", url: "https://careers.ti.com", tier: "Top MNC" },
+      { id: 145, name: "Arm India", cat: "Deep Tech", city: "Bengaluru", url: "https://careers.arm.com", tier: "Top MNC" },
+      { id: 146, name: "Exotel", cat: "SaaS", city: "Bengaluru", url: "https://exotel.com/careers", tier: "Startup" },
+      { id: 147, name: "Vymo", cat: "SaaS", city: "Bengaluru", url: "https://vymo.com/careers", tier: "Startup" },
+      { id: 148, name: "Decentro", cat: "Fintech", city: "Bengaluru", url: "https://decentro.tech/careers", tier: "Startup" },
+      { id: 149, name: "Plum", cat: "Fintech", city: "Bengaluru", url: "https://plumhq.com/careers", tier: "Startup" },
+      { id: 150, name: "Perfios", cat: "Fintech", city: "Bengaluru", url: "https://perfios.com/careers", tier: "Startup" },
+    ];
+
+    const tierStyle = {
+      FAANG: { bg: "#B5D4F4", color: "#0C447C" },
+      "Top MNC": { bg: "#AFA9EC", color: "#3C3489" },
+      "IT Giant": { bg: "#CEC4F5", color: "#533AB7" },
+      Unicorn: { bg: "#9FE1CB", color: "#085041" },
+      Startup: { bg: "#FAC775", color: "#633806" },
+    };
+
+    const catColors = {};
+    const palette = ["#B5D4F4", "#9FE1CB", "#FAC775", "#F5C4B3", "#F4C0D1", "#C0DD97", "#D3D1C7", "#CECBF6", "#9FE1CB", "#F0997B", "#85B7EB", "#5DCAA5", "#EF9F27", "#D85A30", "#D4537E", "#639922"];
+    const allCats = [...new Set(companies.map(c => c.cat))].sort();
+    allCats.forEach((c, i) => { catColors[c] = palette[i % palette.length]; });
+
+    const catSel = document.getElementById("catFilter");
+    ["All categories", ...allCats].forEach(c => {
+      const o = document.createElement("option"); o.textContent = c; catSel.appendChild(o);
+    });
+
+    function initials(name) { return name.split(" ").slice(0, 2).map(w => w[0]).join("").toUpperCase(); }
+
+    function render() {
+      const q = document.getElementById("search").value.toLowerCase();
+      const cat = catSel.value;
+      const tier = document.getElementById("tierFilter").value;
+      const sort = document.getElementById("sortSel").value;
+      let list = companies.filter(c => {
+        const ms = c.name.toLowerCase().includes(q) || c.city.toLowerCase().includes(q);
+        const mc = cat === "All categories" || c.cat === cat;
+        const mt = tier === "All tiers" || c.tier === tier;
+        return ms && mc && mt;
+      });
+      if (sort === "name") list = [...list].sort((a, b) => a.name.localeCompare(b.name));
+      document.getElementById("sub").textContent = `${list.length} of ${companies.length} companies · click any card to apply`;
+      const grid = document.getElementById("grid");
+      if (list.length === 0) { grid.innerHTML = '<div class="empty">No companies match your filters.</div>'; return; }
+      grid.innerHTML = list.map(c => {
+        const ts = tierStyle[c.tier] || { bg: "#D3D1C7", color: "#5F5E5A" };
+        const avBg = catColors[c.cat] || "#D3D1C7";
+        const avColor = "#444";
+        return `<a class="card" href="${c.url}" target="_blank" rel="noopener noreferrer">
+      <div class="card-top">
+        <div class="avatar" style="background:${avBg}22;border:1px solid ${avBg}66;color:${avBg};filter:brightness(0.6) saturate(2)">${initials(c.name)}</div>
+        <div style="min-width:0">
+          <div class="cname">${c.name}</div>
+          <div class="ccity">${c.city}</div>
+        </div>
+      </div>
+      <div class="card-bottom">
+        <span class="badge" style="background:${ts.bg};color:${ts.color}">${c.tier}</span>
+        <span class="badge" style="background:var(--color-background-secondary);color:var(--color-text-secondary)">${c.cat}</span>
+        <span class="apply">Apply →</span>
+      </div>
+    </a>`;
+      }).join("");
+    }
+
+    document.getElementById("search").addEventListener("input", render);
+    catSel.addEventListener("change", render);
+    document.getElementById("tierFilter").addEventListener("change", render);
+    document.getElementById("sortSel").addEventListener("change", render);
+    render();
+  </script>
+</body>
+
+</html>
